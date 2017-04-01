@@ -12,36 +12,75 @@
         <div class="description">
           {{seller.description}}/{{seller.deliveryTime}}分钟送到
 
+
+
+
         </div>
         <div v-if="seller.supports" class="support">
           <span class="icon" :class="classMap[seller.supports[0].type]"></span>
           <span class="text">{{seller.supports[0].description}}</span>
         </div>
       </div>
-      <div v-if="seller.supports" class="support-count">
+      <div v-if="seller.supports" class="support-count" @click="showDetail">
         <span class="count">{{seller.supports.length}}个</span>
         <i class="icon-keyboard_arrow_right"></i>
       </div>
     </div>
-    <div class="bulletin-wrapper">
+    <div class="bulletin-wrapper" @click="showDetail">
       <span class="icon"></span><span class="text">{{seller.bulletin}}</span>
       <i class="icon-keyboard_arrow_right"></i>
     </div>
     <div class="background">
       <img :src="seller.avatar" width="100%" height="100%"/>
     </div>
+    <div v-show="detailShow" class="detail">
+      <div class="detail-wrapper clearfix">
+        <div class="detail-main">
+          <h1 class="name">{{seller.name}}</h1>
+          <div class="star-wrapper">
+            <star :size=48 :score="seller.score"></star>
+          </div>
+          <div class="title">
+            <div class="line"></div>
+            <div class="text">优惠信息</div>
+            <div class="line"></div>
+          </div>
+        </div>
+      </div>
+      <div class="detail-close">
+        <i class="icon-close"></i>
+      </div>
+    </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+  import star from '../star/star.vue'
   export default {
     props: {
       seller: {
         type: Object
       }
     },
+
+    data() {
+      return {
+        detailShow: false
+      }
+    },
+
+    methods: {
+      showDetail() {
+        this.detailShow = true
+      }
+    },
+
     created() {
       this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee']
+    },
+
+    components: {
+      star
     }
   }
 </script>
@@ -50,7 +89,7 @@
   @import "../../common/stylus/mixin"
   .header
     color: #fff
-    background: rgba(7,17,27,0.5)
+    background: rgba(7, 17, 27, 0.5)
     position: relative
     .content-wrapper
       position: relative
@@ -94,15 +133,15 @@
             background-size: 12px 12px
             background-repeat: no-repeat
             &.decrease
-              bg-img('decrease_1')
+              bg-image('decrease_1')
             &.discount
-              bg-img('discount_1')
+              bg-image('discount_1')
             &.special
-              bg-img('special_1')
+              bg-image('special_1')
             &.invoice
-              bg-img('invoice_1')
+              bg-image('invoice_1')
             &.guarantee
-              bg-img('guarantee_1')
+              bg-image('guarantee_1')
           .text
             line-height: 12px
             font-size: 10px
@@ -126,7 +165,7 @@
           line-height: 24px
 
     .bulletin-wrapper
-      background: rgba(7,17,27,0.2)
+      background: rgba(7, 17, 27, 0.2)
       position: relative
       height: 28px
       line-height: 28px
@@ -162,4 +201,49 @@
       height: 100%
       filter: blur(10px)
       overflow: hidden
+    .detail
+      position: fixed
+      left: 0
+      top: 0
+      z-index: 100
+      width: 100%
+      height: 100%
+      overflow: auto
+      background: rgba(7, 17, 27, 0.8)
+      .detail-wrapper
+        width: 100%
+        min-height: 100%
+        .detail-main
+          margin-top: 64px
+          padding-bottom: 64px
+          .name
+            line-height: 16px
+            text-align: center
+            font-size: 16px
+            font-weight: 700px
+          .star-wrapper
+            margin-top: 18px
+            padding: 2px 0
+            text-align: center
+          .title
+            display: flex
+            width: 80%
+            margin: 28px auto 24px auto
+            .line
+              flex: 1
+              position: relative
+              top: -6px
+              border-bottom: 1px solid rgba(255, 255, 255, 0.2)
+            .text
+              padding: 0 12px
+              font-size: 14px
+              font-weight: 700px
+      .detail-close
+        position: relative
+        width: 32px
+        height: 32px
+        margin: -64px auto 0 auto
+        clear: both
+        font-size: 32px
+
 </style>
